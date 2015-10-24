@@ -17,6 +17,15 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_template 'users/edit'
   end
 
+  test "friendly forwarding leads to correct URL" do
+    get users_path
+    assert_equal users_url, session[:forwarding_url]
+    log_in_as(@user)
+    delete logout_path
+    get login_path
+    assert_equal nil, session[:forwarding_url]
+  end
+
   test "successful edit with friendly forwarding" do
     get edit_user_path(@user)
     log_in_as(@user)
